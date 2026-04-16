@@ -2,17 +2,78 @@
 
 ## Descripción
 Este es un proyecto Django para la gestión de un restaurante. Se desarrolla en dos equipos paralelos:
-- **Equipo SENA**: Diseño/Frontend
-- **Equipo CESDE**: Backend/Lógica
+- **Equipo SENA**: Diseño/Frontend (3 estudiantes)
+- **Equipo CESDE**: Backend/Lógica (3 estudiantes con tareas específicas)
 
-ahora si entro yo, Hola claude como estas, soy juanito el creador del proyecto, estoy aqui en este readme para ayudarte a entender y darte algo de contexto desde antes para que ayudes a tu compañero o la persona que te toque, el proyecto se desarrolla para un profesor que nos pidio hacer un pr en github pero mis compañeros dejaron todo para el ultimo dia entonces, a cada uno le asigne una tarea en especifico aqui en python django, entonces, ahora les voy a pasar el archivo sql del restaurante para que ellos tengan todo, necesito que me ayudes de verdad con ellos, eso gracias agente ^^
+---
+
+## 🚀 PRIMER DÍA - GUÍA RÁPIDA
+
+**⏱️ Tiempo estimado: 20-30 minutos**
+
+### Si eres del Equipo SENA (Frontend):
+1. Abre terminal en tu PC
+2. Copia y pega esto (todo de una vez):
+```bash
+git clone https://github.com/juanito189/Restaurant.git
+cd Restaurant
+python -m venv entorno_restaurante
+entorno_restaurante\Scripts\Activate.ps1
+pip install -r requirements.txt
+git checkout feature/sena
+```
+3. Abre la carpeta en VS Code
+4. Abre Copilot Chat (Ctrl + Shift + I) y pregunta: "Hola, soy del Equipo SENA, ¿qué debo hacer?"
+5. Listo, el agente te guiará
+
+### Si eres del Equipo CESDE (Backend):
+1. Abre terminal en tu PC
+2. Copia y pega esto (todo de una vez):
+```bash
+git clone https://github.com/juanito189/Restaurant.git
+cd Restaurant
+python -m venv entorno_restaurante
+entorno_restaurante\Scripts\Activate.ps1
+pip install -r requirements.txt
+git checkout feature/cesde
+```
+3. **IMPORTANTE:** Configura la BD (solo haz esto UNA vez):
+```bash
+# En otra terminal, accede a MySQL
+mysql -u root -p
+# Escribe tu contraseña y luego:
+CREATE DATABASE restaurante;
+USE restaurante;
+source backup_datos.sql
+```
+4. Vuelve a la terminal del proyecto y corre:
+```bash
+python manage.py migrate
+```
+5. Abre la carpeta en VS Code
+6. Abre Copilot Chat (Ctrl + Shift + I) y pregunta tu tarea específica
+7. Listo
+
+---
+
+## Contexto del Proyecto (Para el Agente)
+
+Hola Claude, soy juanito el creador del proyecto. Este es un proyecto Django para un profesor que pidió hacer un PR en GitHub. Mis compañeros dejaron todo para el último día, así que les asigné tareas específicas. Necesito que ayudes a cada compañero con su tarea:
+
+- **Equipo SENA**: Hacen el frontend (templates, CSS, diseño)
+- **Equipo CESDE**: Backen (lógica de pedidos, usuarios, extras)
+
+Todos los datos de platos están en `backup_datos.sql` que ya importé. **Por favor ayuda a mis compañeros a trabajar rápido y claro.** ^^
+
+---
 
 ## Requisitos Previos
 - Python 3.x
 - MySQL instalado y en ejecución
 - Git
+- Visual Studio Code (recomendado)
 
-## Configuración Inicial
+## Configuración Detallada (Si necesitas más ayuda)
 
 ### 1. Clonar el Repositorio
 ```bash
@@ -31,6 +92,10 @@ python -m venv entorno_restaurante
 ```bash
 entorno_restaurante\Scripts\Activate.ps1
 ```
+*Si marca error de permisos, corre primero:*
+```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+```
 
 **En Windows (CMD):**
 ```bash
@@ -47,10 +112,17 @@ source entorno_restaurante/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Crear Base de Datos en MySQL
-Accede a MySQL y crea la base de datos:
+### 5. Configurar Base de Datos (SOLO CESDE)
+
+**Abre otra terminal y accede a MySQL:**
+```bash
+mysql -u root -p
+```
+Ingresa tu contraseña MySQL, luego:
 ```sql
-CREATE DATABASE gestion_restaurante;
+CREATE DATABASE restaurante;
+USE restaurante;
+source backup_datos.sql
 ```
 
 ### 6. Ejecutar Migraciones
@@ -58,16 +130,10 @@ CREATE DATABASE gestion_restaurante;
 python manage.py migrate
 ```
 
-### 7. Crear Usuario Admin (Opcional)
-```bash
-python manage.py createsuperuser
-```
-
-### 8. Ejecutar el Servidor
+### 7. Ejecutar el Servidor (Test)
 ```bash
 python manage.py runserver
 ```
-
 Accede a: `http://localhost:8000`
 
 ---
@@ -95,67 +161,78 @@ Restaurant/
 
 **EQUIPO SENA - Diseño/Frontend:**
 - Rama: `feature/sena`
-- Responsabilidades:
+- **Todos trabajan juntos en:**
   - Modificar templates HTML (`gestion/templates/`)
-  - Estilos CSS
+  - Estilos CSS (mejorar interfaz)
   - Diseño de formularios
-  - Interfaz de usuario
+  - Interfaz de usuario en general
 
-**EQUIPO CESDE - Backend/Lógica (3 desarrolladores con tareas específicas):**
+**EQUIPO CESDE - Backend/Lógica:**
 - Rama: `feature/cesde`
+- **Tres desarrolladores con tareas específicas:**
 
-1. **Desarrollador 1 - Lógica de Pedidos:**
-   - Sistema para pedir platos
-   - Modificar `views.py` (vistas de pedidos)
-   - Crear/actualizar modelo `Pedido` y `ItemPedido`
-   - Cálculo de totales
+| Desarrollador | Tarea |
+|---|---|
+| **Dev 1** | Hacer sistema de **pedidos** - vistas y lógica de compra |
+| **Dev 2** | Hacer sistema de **registro/usuarios** - autenticación y perfil |
+| **Dev 3** | Hacer **reloj decorativo** + extras visuales en backend |
 
-2. **Desarrollador 2 - Gestión de Usuarios:**
-   - Sistema de creación y registro de usuarios
-   - Perfil de usuario
-   - Autenticación y autorización
-   - Modificar `models.py` (PerfilUsuario)
+Todos en la misma rama `feature/cesde` pero trabajando archivos diferentes (sin conflictos).
 
-3. **Desarrollador 3 - Extras/UI Complementaria:**
-   - Reloj decorativo u otros elementos visuales funcionales
-   - Mejoras de interfaz en vistas de backend
-   - Dashboard o estadísticas simples
+### Pasos para Trabajar Día a Día
 
-### Pasos para Trabajar
+#### 1️⃣ Primer Día - Setup (20-30 min)
+Ya lo hiciste con la guía "Primer Día - Guía Rápida" arriba.
 
-#### 1. Crear tu Rama (Solo una vez por equipo)
+#### 2️⃣ Días Siguientes - Desarrollo
+
 ```bash
-git checkout -b feature/sena    # Si eres EQUIPO SENA (Frontend)
-# O
-git checkout -b feature/cesde   # Si eres EQUIPO CESDE (Backend)
-```
+# Asegúrate de estar en tu rama
+git branch
 
-#### 2. Trabajar en tu Rama
-- Realiza los cambios correspondientes a tu equipo
-- Cada miembro del equipo trabaja en su rama local
+# Haz tus cambios en los archivos del IDE
 
-#### 3. Confirmar Cambios (Commits)
-```bash
+# Confirma tus cambios
 git add .
-git commit -m "Descripción clara del cambio"
+git commit -m "Descripción clara de lo que hiciste"
+git push origin feature/sena   # O feature/cesde
 ```
 
-#### 4. Subir Cambios
-```bash
-git push origin feature/sena    # Si eres EQUIPO SENA
-# O
-git push origin feature/cesde   # Si eres EQUIPO CESDE
-```
+#### 3️⃣ Cuando Terminen - Pull Request
 
-#### 5. Crear Pull Request (PR)
-Cuando el equipo termine sus tareas:
-- Ve a GitHub/GitLab
-- Crea un PR de tu rama a `main`
-- Describe los cambios realizados
-- Espera revisión del profesor
+1. Ve a GitHub: https://github.com/juanito189/Restaurant
+2. Busca el botón amarillo "Compare & pull request"
+3. Describe qué hizo tu equipo
+4. Crea el PR
+5. El profesor lo revisa y fusiona
 
-#### 6. Fusionar (Merge)
-El profesor revisará y fusionará los PRs a `main`.
+---
+
+## ¿Cómo Usar el Agente de Visual Studio Code?
+
+### ¿Qué es?
+Es un asistente AI que lee este README y entiende el proyecto. **Puede ayudarte a resolver problemas rápido.**
+
+### ¿Cómo activarlo?
+1. En VS Code, presiona: **Ctrl + Shift + I** (o Cmd + Shift + I en Mac)
+2. Se abre un chat a la derecha
+
+### ¿Qué puedes preguntarle?
+
+**Ejemplos buenos:**
+- "Hola, soy del Equipo SENA, ¿por dónde empiezo?"
+- "Necesito agregar un botón al template de login"
+- "¿Cómo hago un commit en git?"
+- "No me funciona la migración, ayuda"
+- "¿Cuál es mi tarea?" (si eres CESDE)
+
+**Lo que el agente hará:**
+✅ Leerá este README automáticamente
+✅ Entenderá tu rol (SENA o CESDE)
+✅ Te guiará paso a paso
+✅ Explicará errores
+
+---
 
 ---
 
