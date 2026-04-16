@@ -1,0 +1,84 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Eliminar {{ plato.nombre }} — El Restaurante{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 80px auto; padding: 20px;">
+  
+  <!-- Alerta de Eliminación -->
+  <div style="background: rgba(231,76,60,0.12); border: 1px solid var(--danger); border-left: 4px solid var(--danger); 
+              padding: 30px; text-align: center; margin-bottom: 40px; border-radius: 4px;">
+    <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+    
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--danger); margin-bottom: 15px;">
+      Eliminar Plato
+    </h2>
+    
+    <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 10px; line-height: 1.6;">
+      ¿Estás seguro de que deseas eliminar el plato?
+    </p>
+    
+    <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-primary); font-weight: 700; margin-bottom: 20px;">
+      {{ plato.nombre }}
+    </p>
+    
+    <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
+      Esta acción <strong>no se puede deshacer</strong>. El plato será eliminado permanentemente del menú 
+      y de la base de datos.
+    </p>
+  </div>
+
+  <!-- Información del Plato -->
+  <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 20px; margin-bottom: 30px;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 12px; color: var(--text-primary);">
+      Información del Plato
+    </h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+      <div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px;">Nombre</p>
+        <p style="margin: 0; color: var(--text-primary); font-weight: 500;">{{ plato.nombre }}</p>
+      </div>
+      <div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px;">Precio</p>
+        <p style="margin: 0; color: var(--text-primary); font-weight: 500;">${{ plato.precio }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de Acción -->
+  <form method="POST" style="margin-bottom: 20px;">
+    {% csrf_token %}
+    <div style="display: flex; gap: 12px;">
+      <button 
+        type="submit" 
+        style="flex: 1; padding: 14px; background: var(--danger); color: var(--text-light); border: none; 
+               font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em;
+               text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: background 0.25s ease;"
+        onmouseover="this.style.background='#A62C2C';"
+        onmouseout="this.style.background='var(--danger)';"
+      >
+        🗑️ Eliminar Permanentemente
+      </button>
+      <a 
+        href="{% url 'detalle_plato' plato.id_plato %}" 
+        style="flex: 1; padding: 14px; background: transparent; color: var(--gold); border: 1px solid var(--gold); 
+               font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em;
+               text-transform: uppercase; cursor: pointer; border-radius: 4px; text-decoration: none; 
+               display: flex; align-items: center; justify-content: center; transition: all 0.25s ease;"
+        onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--primary)';"
+        onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--gold)';"
+      >
+        ← Cancelar
+      </a>
+    </div>
+  </form>
+
+  <div style="text-align: center;">
+    <a href="{% url 'detalle_plato' plato.id_plato %}" 
+       style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">
+      Volver a los detalles del plato
+    </a>
+  </div>
+
+</div>
+{% endblock %}

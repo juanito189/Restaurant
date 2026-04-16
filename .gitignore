@@ -1,0 +1,25 @@
+# Entorno virtual
+entorno_restaurante/
+
+# Variables de entorno
+.env
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# BD local (cada dev tiene la suya)
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

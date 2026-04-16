@@ -1,0 +1,157 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Registro — El Restaurante{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 60px auto; padding: 20px;">
+  
+  <!-- Alerta de Bienvenida -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 10px;">
+      ✦ Crear Cuenta
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+      Únete a la familia de El Restaurante
+    </p>
+  </div>
+
+  <!-- Mensajes de Error/Éxito -->
+  {% if messages %}
+  <div style="margin-bottom: 20px;">
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid var(--success);
+                    background-color: rgba(39, 174, 96, 0.12); color: var(--success);">
+          {{ message }}
+        </div>
+      {% else %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid var(--danger);
+                    background-color: rgba(231, 76, 60, 0.12); color: var(--danger);">
+          {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Formulario de Registro -->
+  <form method="POST" style="background: var(--bg-card); padding: 30px; border: 1px solid var(--border-subtle);">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 20px;">
+      <label for="first_name" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Nombre <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="first_name" 
+        name="first_name" 
+        required
+        placeholder="Tu nombre"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="username" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Usuario <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="username" 
+        name="username" 
+        required
+        placeholder="nombre_usuario"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+      <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Sin espacios, solo letras y números</small>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="email" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Correo Electrónico <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        required
+        placeholder="tu@correo.com"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="password" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Contraseña <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        required
+        placeholder="••••••••"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+      <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Mínimo 8 caracteres</small>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="password_confirm" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Confirmar Contraseña <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="password" 
+        id="password_confirm" 
+        name="password_confirm" 
+        required
+        placeholder="••••••••"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+    </div>
+
+    <button 
+      type="submit" 
+      style="width: 100%; padding: 12px; background: var(--gold); color: var(--primary); border: none; 
+             font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em;
+             text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 0.25s ease; margin-bottom: 16px;"
+      onmouseover="this.style.background='var(--gold-light)'; this.style.transform='translateY(-1px)';"
+      onmouseout="this.style.background='var(--gold)'; this.style.transform='translateY(0)';"
+    >
+      🎉 Crear Cuenta
+    </button>
+  </form>
+
+  <!-- Política -->
+  <div style="text-align: center; margin-top: 20px; padding: 16px; background: rgba(212,175,55,0.05); border-radius: 4px;">
+    <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0; line-height: 1.5;">
+      Al crear una cuenta aceptas nuestros términos de servicio.<br/>
+      Usaremos tu correo solo para notificaciones importantes.
+    </p>
+  </div>
+
+  <!-- Enlace a Login -->
+  <div style="text-align: center; margin-top: 30px;">
+    <p style="color: var(--text-secondary); margin-bottom: 12px;">
+      ¿Ya tienes cuenta?
+    </p>
+    <a href="{% url 'login' %}" 
+       style="color: var(--gold); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+      Inicia sesión aquí →
+    </a>
+  </div>
+
+  <!-- Link back to menu -->
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="{% url 'menu' %}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">
+      ← Volver al menú
+    </a>
+  </div>
+
+</div>
+{% endblock %}

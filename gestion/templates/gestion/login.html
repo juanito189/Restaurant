@@ -1,0 +1,107 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Iniciar Sesión — El Restaurante{% endblock %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 80px auto; padding: 20px;">
+  
+  <!-- Alerta de Bienvenida -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 10px;">
+      ✦ Bienvenido
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+      Inicia sesión para acceder a tu cuenta
+    </p>
+  </div>
+
+  <!-- Mensajes de Error/Éxito -->
+  {% if messages %}
+  <div style="margin-bottom: 20px;">
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid var(--success);
+                    background-color: rgba(39, 174, 96, 0.12); color: var(--success);">
+          {{ message }}
+        </div>
+      {% else %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid var(--danger);
+                    background-color: rgba(231, 76, 60, 0.12); color: var(--danger);">
+          {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Formulario de Login -->
+  <form method="POST" style="background: var(--bg-card); padding: 30px; border: 1px solid var(--border-subtle);">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 20px;">
+      <label for="username" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Usuario <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="username" 
+        name="username" 
+        required
+        placeholder="tu_usuario"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="password" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Contraseña <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        required
+        placeholder="••••••••"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+    </div>
+
+    <button 
+      type="submit" 
+      style="width: 100%; padding: 12px; background: var(--gold); color: var(--primary); border: none; 
+             font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em;
+             text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 0.25s ease; margin-bottom: 16px;"
+      onmouseover="this.style.background='var(--gold-light)'; this.style.transform='translateY(-1px)';"
+      onmouseout="this.style.background='var(--gold)'; this.style.transform='translateY(0)';"
+    >
+      🔓 Iniciar Sesión
+    </button>
+  </form>
+
+  <!-- Enlace a Registro -->
+  <div style="text-align: center; margin-top: 30px;">
+    <p style="color: var(--text-secondary); margin-bottom: 12px;">
+      ¿Aún no tienes cuenta?
+    </p>
+    <a href="{% url 'registro' %}" 
+       style="display: inline-block; padding: 12px 32px; background: transparent; color: var(--gold); 
+              border: 1px solid var(--gold); font-family: 'Jost', sans-serif; font-size: 0.9rem; 
+              font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; 
+              border-radius: 4px; transition: all 0.25s ease;"
+       onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--primary)';"
+       onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--gold)';">
+      Crear Cuenta
+    </a>
+  </div>
+
+  <!-- Link back to menu -->
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="{% url 'menu' %}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">
+      ← Volver al menú
+    </a>
+  </div>
+
+</div>
+{% endblock %}

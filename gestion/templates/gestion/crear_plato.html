@@ -1,0 +1,94 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Crear Plato — El Restaurante{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto; padding: 20px;">
+  <h2 style="text-align: center; font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 30px; color: var(--gold);">
+    Crear Nuevo Plato
+  </h2>
+
+  {% if messages %}
+  <div style="margin-bottom: 20px;">
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid #3A6B4A;
+                    background-color: rgba(58,107,74,0.08); color: #3A6B4A;">
+      {% else %}
+        <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 4px; border-left: 3px solid #B83232;
+                    background-color: rgba(184,50,50,0.08); color: #B83232;">
+      {% endif %}
+          {{ message }}
+        </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form method="POST" style="background: var(--bg-card); padding: 30px; border: 1px solid var(--border-subtle);">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 20px;">
+      <label for="nombre" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Nombre del Plato <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="nombre" 
+        name="nombre" 
+        required
+        maxlength="40"
+        placeholder="Ej: Pasta a la Carbonara"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+      <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Máximo 40 caracteres</small>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="precio" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Precio (COP) <span style="color: var(--danger);">*</span>
+      </label>
+      <input 
+        type="number" 
+        id="precio" 
+        name="precio" 
+        required
+        min="0"
+        step="0.01"
+        placeholder="Ej: 25000"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+      <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Ingrese el precio en pesos colombianos</small>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-top: 30px;">
+      <button 
+        type="submit" 
+        style="flex: 1; padding: 12px; background: var(--primary); color: var(--text-light); border: none; 
+               font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em;
+               text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: background 0.25s ease;"
+        onmouseover="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim(); this.style.color='var(--primary)';"
+        onmouseout="this.style.background='var(--primary)'; this.style.color='var(--text-light)';"
+      >
+        Crear Plato
+      </button>
+      <a 
+        href="{% url 'menu' %}" 
+        style="flex: 1; padding: 12px; background: transparent; color: var(--gold); border: 1px solid var(--gold); 
+               font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em;
+               text-transform: uppercase; cursor: pointer; border-radius: 4px; text-decoration: none; 
+               display: flex; align-items: center; justify-content: center; transition: all 0.25s ease;"
+        onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--primary)';"
+        onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--gold)';"
+      >
+        Cancelar
+      </a>
+    </div>
+  </form>
+
+  <p style="text-align: center; margin-top: 30px; color: var(--text-secondary); font-size: 0.9rem;">
+    <strong>Nota:</strong> El plato se agregará al menú inmediatamente después de crearlo.
+  </p>
+</div>
+{% endblock %}
