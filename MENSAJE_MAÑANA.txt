@@ -1,0 +1,139 @@
+📝 MENSAJE PARA COMPARTIR CON TUS COMPAÑEROS MAÑANA
+═════════════════════════════════════════════════════
+
+Copia y pega esto en el grupo o envía individualmente:
+
+---
+
+¡Hola equipo! 
+
+Aquí está el repositorio con todo listo para empezar. Sigan esto paso a paso:
+
+## 🚀 PASO 1: Clonar el Repo (5 min)
+
+1. Abren una terminal (PowerShell/CMD en Windows, Terminal en Mac/Linux)
+2. Copian y pegan esto TODO DE UNA VEZ:
+
+### Si eres EQUIPO SENA (Frontend):
+```
+git clone https://github.com/juanito189/Restaurant.git
+cd Restaurant
+python -m venv entorno_restaurante
+entorno_restaurante\Scripts\Activate.ps1
+pip install -r requirements.txt
+git checkout feature/sena
+```
+
+### Si eres EQUIPO CESDE (Backend):
+```
+git clone https://github.com/juanito189/Restaurant.git
+cd Restaurant
+python -m venv entorno_restaurante
+entorno_restaurante\Scripts\Activate.ps1
+pip install -r requirements.txt
+git checkout feature/cesde
+```
+
+## 🗄️ PASO 2: Configurar Base de Datos (Solo CESDE) (10 min)
+
+*Si eres SENA, brinca este paso*
+
+1. Abren OTRA terminal
+2. Escriben: `mysql -u root -p`
+3. Ingresan su contraseña de MySQL
+4. Pegan esto:
+```
+CREATE DATABASE restaurante;
+USE restaurante;
+source backup_datos.sql
+```
+
+## ✅ PASO 3: Verificar que Funciona (5 min)
+
+En la terminal del proyecto (la primera):
+```
+python manage.py migrate
+python manage.py runserver
+```
+
+Abren el navegador a: http://localhost:8000
+
+Si ven la página del restaurante, ¡LISTO! ✅
+
+## 🧠 PASO 4: Abrir en Visual Studio Code
+
+1. Abren VS Code
+2. File → Open Folder → Eligen la carpeta Restaurant
+3. Esperan a que cargue
+
+## 🤖 PASO 5: Usar el Agente (LO IMPORTANTE)
+
+1. Presionan: **Ctrl + Shift + I**
+2. Se abre un chat a la derecha
+3. Escriben: "Hola, soy del Equipo [SENA/CESDE], ¿qué hago?"
+4. El agente Lee este README y TE GUÍA PASO A PASO
+
+El agente entiende el proyecto, sabe tu rol, y te ayuda a resolver problemas.
+
+---
+
+## 📋 TAREAS POR EQUIPO
+
+**EQUIPO SENA (Frontend):**
+- Hacen templates bonitos
+- Mejorar HTML y CSS
+- El agente te guiará
+
+**EQUIPO CESDE (Backend):**
+- Dev 1: Sistema de pedidos
+- Dev 2: Registro de usuarios
+- Dev 3: Reloj decorativo + extras
+- El agente te dirá exactamente qué modificar
+
+---
+
+## 🔧 Durante el Desarrollo
+
+Cada día:
+1. Hacen sus cambios en VS Code
+2. Terminal: `git add .`
+3. Terminal: `git commit -m "Descripción de lo que hiciste"`
+4. Terminal: `git push origin feature/sena` (o feature/cesde)
+5. **Si se pierden, hablen con el agente**
+
+---
+
+## ❓ Preguntas Frecuentes
+
+**P: ¿No me funciona algo?**
+R: Pregúntale al agente de VS Code. Abre el chat (Ctrl+Shift+I) y explica qué pasó.
+
+**P: ¿Qué si es diferente en Mac/Linux?**
+R: En el README (en el repo) hay instrucciones para todos los sistemas.
+
+**P: ¿Cuándo hacemos PR?**
+R: Yo les digo cuándo. Por ahora solo trabajen en sus ramas.
+
+---
+
+## 📌 RESUMEN EN 1 MINUTO
+
+1. Clone repo
+2. Cree virtual env
+3. Instale dependencias
+4. Si CESDE: Configure BD
+5. Abra en VS Code
+6. Abra agente (Ctrl+Shift+I)
+7. ¡Trabajar!
+
+---
+
+El README completo en el repo tiene MÁS información si necesitan. 
+
+¡Cualquier pregunta, me avisan!
+
+Éxito 🚀
+
+---
+
+[FIN DEL MENSAJE - Puedes copiarlo tal cual]
