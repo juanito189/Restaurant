@@ -16,7 +16,7 @@ ahora si entro yo, Hola claude como estas, soy juanito el creador del proyecto, 
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/juanito189/Restaurant.git
 cd Restaurant
 ```
 
