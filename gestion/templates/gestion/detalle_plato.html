@@ -47,51 +47,45 @@
         </div>
 
         <!-- Botones de Acción -->
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button style="background: var(--primary); color: var(--text-light); border: none; font-family: 'Jost', sans-serif; 
-                         font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; 
-                         padding: 14px 28px; cursor: pointer; transition: all 0.25s ease;"
-                  onmouseover="this.style.background='var(--gold)'; this.style.color='var(--primary)';"
-                  onmouseout="this.style.background='var(--primary)'; this.style.color='var(--text-light)';">
-            🛒 Pedir Ahora
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            Pedir Ahora
           </button>
           {% if user.is_authenticated and user.perfil.rol == 'admin' %}
-          <a href="{% url 'editar_plato' plato.id_plato %}" style="background: transparent; color: var(--gold); border: 1px solid var(--gold); 
-                                              font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; 
-                                              letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 28px; 
-                                              cursor: pointer; text-decoration: none; display: inline-flex; 
-                                              align-items: center; transition: all 0.25s ease;"
-             onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--primary)';"
-             onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--gold)';">
-            ✏️ Editar
+          <a href="{% url 'editar_plato' plato.id_plato %}" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Editar
           </a>
-          <a href="{% url 'eliminar_plato' plato.id_plato %}" style="background: transparent; color: var(--danger); border: 1px solid var(--danger); 
-                                              font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; 
-                                              letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 28px; 
-                                              cursor: pointer; text-decoration: none; display: inline-flex; 
-                                              align-items: center; transition: all 0.25s ease;"
-             onmouseover="this.style.backgroundColor='rgba(184,50,50,0.15)';"
-             onmouseout="this.style.backgroundColor='transparent';">
-            🗑️ Eliminar
+          <a href="{% url 'eliminar_plato' plato.id_plato %}" class="btn btn-danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+            Eliminar
           </a>
           {% endif %}
-          <a href="{% url 'menu' %}" style="background: transparent; color: var(--gold); border: 1px solid var(--gold); 
-                                              font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; 
-                                              letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 28px; 
-                                              cursor: pointer; text-decoration: none; display: inline-flex; 
-                                              align-items: center; transition: all 0.25s ease;"
-             onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--primary)';"
-             onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--gold)';">
-            ← Volver
+          <a href="{% url 'menu' %}" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Volver
           </a>
         </div>
       </div>
 
-      <!-- Imagen/Icon del plato (placeholder) -->
-      <div style="width: 250px; height: 250px; background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(184,50,50,0.05)); 
+      <!-- Imagen del plato -->
+      <div style="width: 320px; height: 320px; background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(184,50,50,0.05)); 
                   border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; 
-                  font-size: 4rem;">
-        🍽️
+                  font-size: 4rem; overflow: hidden; border-radius: 50%;">
+        {% if plato.imagen %}
+          <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+          🍽️
+        {% endif %}
       </div>
 
     </div>
@@ -118,37 +112,116 @@
   </div>
   {% endif %}
 
-  <!-- Información Nutricional (placeholder) -->
+  <!-- Información Nutricional (Gráficos) -->
   <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 30px;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-primary); margin-bottom: 20px; font-weight: 400;">
-      Información del Plato
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-primary); margin-bottom: 30px; font-weight: 400;">
+      Información Nutricional
     </h2>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
-      <div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">Calorías</p>
-        <p style="font-size: 1.3rem; color: var(--text-primary); margin: 0; font-weight: 500;">450 kcal</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center;">
+      <!-- Gráfico de Pie -->
+      <div style="display: flex; justify-content: center; height: 280px; position: relative;">
+        <canvas id="nutrientChart"></canvas>
       </div>
+      
+      <!-- Leyenda y Detalles -->
       <div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">Proteínas</p>
-        <p style="font-size: 1.3rem; color: var(--text-primary); margin: 0; font-weight: 500;">28g</p>
-      </div>
-      <div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">Carbohidratos</p>
-        <p style="font-size: 1.3rem; color: var(--text-primary); margin: 0; font-weight: 500;">35g</p>
-      </div>
-      <div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">Grasas</p>
-        <p style="font-size: 1.3rem; color: var(--text-primary); margin: 0; font-weight: 500;">15g</p>
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <div style="width: 16px; height: 16px; background-color: #D4AF37; border-radius: 3px;"></div>
+            <span style="color: var(--text-primary); font-weight: 500;">Proteínas: 28g</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <div style="width: 16px; height: 16px; background-color: #FF6B35; border-radius: 3px;"></div>
+            <span style="color: var(--text-primary); font-weight: 500;">Carbohidratos: 35g</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <div style="width: 16px; height: 16px; background-color: #00D9FF; border-radius: 3px;"></div>
+            <span style="color: var(--text-primary); font-weight: 500;">Grasas: 15g</span>
+          </div>
+        </div>
+        
+        <div style="padding: 15px; background: rgba(212,175,55,0.08); border-left: 3px solid var(--gold); margin-top: 20px;">
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">
+            <strong>Total de Calorías:</strong>
+          </p>
+          <p style="font-size: 1.8rem; color: var(--gold); margin: 0; font-weight: 600;">450 kcal</p>
+        </div>
       </div>
     </div>
 
-    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
-      <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
-        ⚠️ <strong>Alergias:</strong> Contiene gluten y lácteos. Consulta con nuestro personal sobre otros alérgenos.
-      </p>
+    <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-subtle);">
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" style="margin-top: 2px; flex-shrink: 0;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+          <strong>Alergias:</strong> Contiene gluten y lácteos. Consulta con nuestro personal sobre otros alérgenos.
+        </p>
+      </div>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('nutrientChart').getContext('2d');
+      
+      // Colores vibrantes y energéticos
+      const colors = {
+        gold: '#D4AF37',       // Proteínas (Oro principal)
+        naranja: '#FF6B35',    // Carbohidratos (Naranja-rojo vibrante)
+        cian: '#00D9FF',       // Grasas (Azul cian energético)
+        bg: '#1a1a1a'          // Color de fondo para borde
+      };
+
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Proteínas', 'Carbohidratos', 'Grasas'],
+          datasets: [{
+            data: [28, 35, 15],
+            backgroundColor: [colors.gold, colors.naranja, colors.cian],
+            hoverBackgroundColor: [colors.gold, colors.naranja, colors.cian],
+            borderColor: colors.bg,
+            borderWidth: 4, // Borde grueso para efecto elegante
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // Permite que el contenedor controle el tamaño
+          cutout: '75%', // Anillo fino y moderno
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: true,
+              backgroundColor: '#111',
+              titleFont: { family: 'Jost', size: 14 },
+              bodyFont: { family: 'Jost', size: 13 },
+              padding: 12,
+              displayColors: true,
+              cornerRadius: 4,
+              borderColor: colors.gold,
+              borderWidth: 1,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.label}: ${context.parsed}g`;
+                }
+              }
+            }
+          },
+          // Animación suave
+          animation: {
+            animateScale: true,
+            animateRotate: true
+          }
+        }
+      });
+    });
+  </script>
 
 </div>
 {% endblock %}
