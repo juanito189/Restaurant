@@ -30,7 +30,7 @@
   </div>
   {% endif %}
 
-  <form method="POST" style="background: var(--bg-card); padding: 30px; border: 1px solid var(--border-subtle);">
+  <form method="POST" enctype="multipart/form-data" style="background: var(--bg-card); padding: 30px; border: 1px solid var(--border-subtle);">
     {% csrf_token %}
 
     <div style="margin-bottom: 20px;">
@@ -66,6 +66,27 @@
                font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
       />
       <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Ingrese el precio en pesos colombianos</small>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="imagen" style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-primary);">
+        Imagen del Plato
+      </label>
+      {% if plato.imagen %}
+        <div style="margin-bottom: 10px;">
+          <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" style="max-width: 200px; max-height: 200px; border: 1px solid var(--border-subtle);">
+          <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 5px;">Imagen actual</p>
+        </div>
+      {% endif %}
+      <input 
+        type="file" 
+        id="imagen" 
+        name="imagen" 
+        accept="image/*"
+        style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 4px; 
+               font-family: 'Jost', sans-serif; font-size: 1rem; box-sizing: border-box; background: var(--bg-hover); color: var(--text-primary);"
+      />
+      <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Opcional. Subir nueva imagen para reemplazar la actual. Formatos: JPG, PNG, etc.</small>
     </div>
 
     <div style="display: flex; gap: 12px; margin-top: 30px;">

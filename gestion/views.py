@@ -69,6 +69,7 @@ def crear_plato(request):
         try:
             nombre = request.POST.get('nombre', '').strip()
             precio = request.POST.get('precio', '').strip()
+            imagen = request.FILES.get('imagen')
             
             if not nombre:
                 messages.error(request, 'El nombre del plato es obligatorio.')
@@ -88,7 +89,8 @@ def crear_plato(request):
             
             plato = Platos.objects.create(
                 nombre=nombre,
-                precio=precio
+                precio=precio,
+                imagen=imagen
             )
             messages.success(request, f'Plato "{nombre}" creado exitosamente.')
             return redirect('menu')
@@ -111,6 +113,7 @@ def editar_plato(request, plato_id):
         try:
             nombre = request.POST.get('nombre', '').strip()
             precio = request.POST.get('precio', '').strip()
+            imagen = request.FILES.get('imagen')
             
             if not nombre:
                 messages.error(request, 'El nombre del plato es obligatorio.')
@@ -130,6 +133,8 @@ def editar_plato(request, plato_id):
             
             plato.nombre = nombre
             plato.precio = precio
+            if imagen:
+                plato.imagen = imagen
             plato.save()
             
             messages.success(request, f'Plato "{nombre}" actualizado exitosamente.')

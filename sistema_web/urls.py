@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from gestion import views
 
 urlpatterns = [
@@ -33,3 +35,7 @@ urlpatterns = [
     path('platos/<int:plato_id>/eliminar/', views.eliminar_plato, name='eliminar_plato'),
     path('platos/crear/', views.crear_plato, name='crear_plato'),
 ]
+
+# Servir archivos media en desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

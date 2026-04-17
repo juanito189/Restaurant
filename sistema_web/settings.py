@@ -72,22 +72,21 @@ WSGI_APPLICATION = 'sistema_web.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# Según el README, el proyecto usa MySQL con una base de datos llamada 'restaurante'.
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  #Esta cosa es el motor de la base de datos sql
-        'NAME ': 'restaurante', #nombre de mi proyecto en mysql
-        'USER' : 'root', #Tipico usuario 
-        'PASSWORD': '', #no hay contra
-        'HOST': '127.0.0.1', #solo es localhot yya nada del otro mundo 
-        'PORT': '3306', #te odio puerto
+        'ENGINE': 'django.db.backends.mysql',  # motor MySQL según README
+        'NAME': 'restaurante',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
-           'init_command': "USE restaurante;", #esto es para decirle a mysql que use la base de datos restaurante y es obligatorio
+           'init_command': "USE restaurante;",
         },
-    } #este bloque es para configurar la base de datos, con cosas sencillas yya pero a memorizarrrrr
-    
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -124,3 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Media files (Uploaded images, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

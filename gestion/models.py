@@ -78,6 +78,7 @@ class Platos(models.Model):
     id_plato = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=40)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    imagen = models.ImageField(upload_to='platos/', blank=True, null=True)
 
     class Meta:
         managed = False
