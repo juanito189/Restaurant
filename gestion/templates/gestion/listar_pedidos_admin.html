@@ -1,0 +1,137 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Gestión de Pedidos (Admin){% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 mb-5">
+    <div style="border-top: 3px solid #d4af37; padding-top: 20px; margin-bottom: 30px;">
+        <h1 style="font-size: 2.5rem; color: #d4af37; font-weight: bold; margin-bottom: 5px;">👨‍💼 GESTIÓN DE PEDIDOS</h1>
+        <p style="color: #999; font-size: 0.95rem;">Panel de administración - Control total de órdenes</p>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" style="border-left: 5px solid #d4af37;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if pedidos %}
+        <div style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent); padding: 20px; border-left: 3px solid #d4af37; border-radius: 5px; margin-bottom: 30px;">
+            <p style="color: #999; font-size: 0.9rem; margin-bottom: 5px;">TOTAL DE PEDIDOS EN EL SISTEMA</p>
+            <p style="color: #d4af37; font-size: 1.8rem; font-weight: bold; margin-bottom: 0;">{{ total_pedidos }}</p>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table" style="margin-bottom: 0;">
+                <thead style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); color: #d4af37; border: none;">
+                    <tr>
+                        <th style="padding: 15px; border: none;">ID</th>
+                        <th style="padding: 15px; border: none;">CLIENTE</th>
+                        <th style="padding: 15px; border: none;">FECHA</th>
+                        <th style="padding: 15px; border: none; text-align: center;">ITEMS</th>
+                        <th style="padding: 15px; border: none; text-align: right;">TOTAL</th>
+                        <th style="padding: 15px; border: none; text-align: center;">ESTADO</th>
+                        <th style="padding: 15px; border: none;">ÚLTIMA ACT.</th>
+                        <th style="padding: 15px; border: none; text-align: center;">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                        <tr style="border-bottom: 1px solid #333; transition: background-color 0.3s;">
+                            <td style="padding: 15px; vertical-align: middle; color: #d4af37; font-weight: bold;">#{{ pedido.id_pedido }}</td>
+                            <td style="padding: 15px; vertical-align: middle; color: #ccc;">
+                                <strong>{{ pedido.usuario.first_name }} {{ pedido.usuario.last_name }}</strong><br>
+                                <small style="color: #999;">@{{ pedido.usuario.username }}</small>
+                            </td>
+                            <td style="padding: 15px; vertical-align: middle; color: #ccc;">{{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</td>
+                            <td style="padding: 15px; vertical-align: middle; text-align: center;">
+                                <span class="badge" style="background: rgba(212, 175, 55, 0.3); color: #d4af37; padding: 6px 10px; font-weight: bold;">{{ pedido.items.count }}</span>
+                            </td>
+                            <td style="padding: 15px; vertical-align: middle; text-align: right; color: #d4af37; font-weight: bold; font-size: 1.1rem;">${{ pedido.total }}</td>
+                            <td style="padding: 15px; vertical-align: middle; text-align: center;">
+                                {% if pedido.estado == 'pendiente' %}
+                                    <span class="badge" style="background: #ffc107; color: #1a1a1a; padding: 6px 10px; font-weight: bold;">PENDIENTE</span>
+                                {% elif pedido.estado == 'confirmado' %}
+                                    <span class="badge" style="background: #17a2b8; color: #fff; padding: 6px 10px; font-weight: bold;">CONFIRMADO</span>
+                                {% elif pedido.estado == 'preparando' %}
+                                    <span class="badge" style="background: #007bff; color: #fff; padding: 6px 10px; font-weight: bold;">PREPARANDO</span>
+                                {% elif pedido.estado == 'listo' %}
+                                    <span class="badge" style="background: #28a745; color: #fff; padding: 6px 10px; font-weight: bold;">LISTO</span>
+                                {% elif pedido.estado == 'cancelado' %}
+                                    <span class="badge" style="background: #dc3545; color: #fff; padding: 6px 10px; font-weight: bold;">CANCELADO</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px; vertical-align: middle; color: #999; font-size: 0.9rem;">{{ pedido.fecha_actualizacion|date:"d/m/Y H:i" }}</td>
+                            <td style="padding: 15px; vertical-align: middle; text-align: center;">
+                                <a href="{% url 'detalle_pedido' pedido.id_pedido %}" class="btn btn-sm" style="background: #333; color: #d4af37; border: 1px solid #d4af37; padding: 5px 10px; margin-right: 5px; transition: all 0.3s;" onmouseover="this.style.background='#d4af37'; this.style.color='#1a1a1a';" onmouseout="this.style.background='#333'; this.style.color='#d4af37';">📋 VER</a>
+                                {% if pedido.estado != 'cancelado' %}
+                                    <button class="btn btn-sm" style="background: #d4af37; color: #1a1a1a; border: 1px solid #d4af37; padding: 5px 10px; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#estadoModal{{ pedido.id_pedido }}">⚙️ ESTADO</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Modales para cambiar estado -->
+        {% for pedido in pedidos %}
+            {% if pedido.estado != 'cancelado' %}
+                <div class="modal fade" id="estadoModal{{ pedido.id_pedido }}" tabindex="-1" style="--bs-modal-bg: #1a1a1a; --bs-modal-border-color: #d4af37;">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="background: linear-gradient(135deg, #1a1a1a, #252525); border: 1px solid #d4af37;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #d4af37, #e8c744); border-bottom: 1px solid #d4af37;">
+                                <h5 class="modal-title" style="color: #1a1a1a; font-weight: bold;">Cambiar Estado - Pedido #{{ pedido.id_pedido }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form method="POST" action="{% url 'cambiar_estado_pedido' pedido.id_pedido %}">
+                                {% csrf_token %}
+                                <div class="modal-body p-4">
+                                    <label for="estado{{ pedido.id_pedido }}" class="form-label" style="color: #d4af37; font-weight: bold;">NUEVO ESTADO</label>
+                                    <select name="estado" id="estado{{ pedido.id_pedido }}" class="form-select" style="background: #1a1a1a; color: #d4af37; border: 1px solid #d4af37;" required>
+                                        <option value="">-- Selecciona un estado --</option>
+                                        <option value="pendiente" {% if pedido.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                                        <option value="confirmado" {% if pedido.estado == 'confirmado' %}selected{% endif %}>Confirmado</option>
+                                        <option value="preparando" {% if pedido.estado == 'preparando' %}selected{% endif %}>Preparando</option>
+                                        <option value="listo" {% if pedido.estado == 'listo' %}selected{% endif %}>Listo</option>
+                                        <option value="cancelado" {% if pedido.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer" style="border-top: 1px solid #444;">
+                                    <button type="button" class="btn" style="background: #333; color: #ccc; border: 1px solid #444;" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn" style="background: linear-gradient(135deg, #d4af37, #e8c744); color: #1a1a1a; font-weight: bold; border: none;">ACTUALIZAR ESTADO</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="text-center" style="padding: 80px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">📦</div>
+            <h4 style="color: #d4af37; margin-bottom: 10px; font-weight: bold;">No hay pedidos en el sistema</h4>
+            <p style="color: #999; margin-bottom: 30px; font-size: 1.05rem;">Los pedidos aparecerán aquí cuando los clientes realicen órdenes</p>
+        </div>
+    {% endif %}
+    
+    <div class="mt-5 pt-4" style="border-top: 1px solid #444;">
+        <a href="{% url 'menu' %}" class="btn btn-lg" style="background: #333; color: #d4af37; border: 2px solid #d4af37; font-weight: bold; padding: 12px 40px; border-radius: 5px; transition: all 0.3s;" onmouseover="this.style.background='#d4af37'; this.style.color='#1a1a1a';" onmouseout="this.style.background='#333'; this.style.color='#d4af37';">← VOLVER AL MENÚ</a>
+    </div>
+</div>
+
+<style>
+    .table tbody tr:hover {
+        background-color: rgba(212, 175, 55, 0.05);
+    }
+    
+    @media (max-width: 768px) {
+        h1 { font-size: 1.8rem; }
+        .table { font-size: 0.9rem; }
+        .btn-sm { font-size: 0.8rem; padding: 3px 8px !important; }
+    }
+</style>
+{% endblock %}

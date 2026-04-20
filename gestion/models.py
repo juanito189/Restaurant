@@ -38,7 +38,6 @@ class Pedido(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     class Meta:
-        managed = False
         db_table = 'pedidos_usuario'
         verbose_name_plural = 'Pedidos'
         ordering = ['-fecha_pedido']
@@ -54,7 +53,6 @@ class ItemPedido(models.Model):
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     
     class Meta:
-        managed = False
         db_table = 'items_pedidos'
         verbose_name_plural = 'Items de Pedidos'
     

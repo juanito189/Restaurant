@@ -1,0 +1,375 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Detalle del Pedido #{{ pedido.id_pedido }}{% endblock %}
+
+{% block content %}
+<div class="custom-container">
+    <div class="page-header">
+        <h1>📦 Pedido #{{ pedido.id_pedido }}</h1>
+        <p>Detalles completos de tu orden</p>
+    </div>
+    
+    <div class="detail-wrapper">
+        
+        <div class="detail-main">
+            
+            <div class="custom-card custom-card-gradient">
+                <h5 class="card-title-gold">👤 INFORMACIÓN GENERAL</h5>
+                
+                <div class="info-grid">
+                    <div class="info-column">
+                        <div class="info-group">
+                            <span class="info-label">CLIENTE</span>
+                            <span class="info-value">{{ pedido.usuario.first_name }} {{ pedido.usuario.last_name }}</span>
+                        </div>
+                        
+                        <div class="info-group">
+                            <span class="info-label">USUARIO</span>
+                            <span class="info-value text-gold">@{{ pedido.usuario.username }}</span>
+                        </div>
+                        
+                        <div class="info-group mb-0">
+                            <span class="info-label">EMAIL</span>
+                            <span class="info-value">{{ pedido.usuario.email }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-column">
+                        <div class="info-group">
+                            <span class="info-label">FECHA DE PEDIDO</span>
+                            <span class="info-value">{{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        
+                        <div class="info-group">
+                            <span class="info-label">ÚLTIMA ACTUALIZACIÓN</span>
+                            <span class="info-value">{{ pedido.fecha_actualizacion|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        
+                        <div class="info-group mb-0">
+                            <span class="info-label">ESTADO</span>
+                            {% if pedido.estado == 'pendiente' %}
+                                <span class="custom-badge badge-pendiente">PENDIENTE</span>
+                            {% elif pedido.estado == 'confirmado' %}
+                                <span class="custom-badge badge-confirmado">CONFIRMADO</span>
+                            {% elif pedido.estado == 'preparando' %}
+                                <span class="custom-badge badge-preparando">PREPARANDO</span>
+                            {% elif pedido.estado == 'listo' %}
+                                <span class="custom-badge badge-listo">LISTO</span>
+                            {% elif pedido.estado == 'cancelado' %}
+                                <span class="custom-badge badge-cancelado">CANCELADO</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="custom-card">
+                <h5 class="card-title-gold">🍽️ PLATOS ORDENADOS</h5>
+                
+                {% if items %}
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>PLATO</th>
+                                    <th style="text-align: center;">PRECIO</th>
+                                    <th style="text-align: center;">CANTIDAD</th>
+                                    <th style="text-align: right;">SUBTOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                    <tr>
+                                        <td>{{ item.plato.nombre }}</td>
+                                        <td style="text-align: center;">${{ item.precio_unitario }}</td>
+                                        <td style="text-align: center;">{{ item.cantidad }}</td>
+                                        <td style="text-align: right; color: #d4af37; font-weight: bold;">${{ item.subtotal }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="total-banner" style="margin-top: 20px;">
+                        <span class="info-label">TOTAL DEL PEDIDO</span>
+                        <span class="total-value">${{ total }}</span>
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 40px;">
+                        <p style="color: #999;">Este pedido no tiene items.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if user.perfil.rol == 'admin' and pedido.estado != 'cancelado' %}
+                <div class="custom-card">
+                    <h5 class="card-title-gold">⚙️ CAMBIAR ESTADO (ADMIN)</h5>
+                    
+                    <form method="POST" action="{% url 'cambiar_estado_pedido' pedido.id_pedido %}" style="margin: 0;">
+                        {% csrf_token %}
+                        <div class="admin-controls">
+                            <select name="estado" class="custom-select">
+                                <option value="">-- Selecciona un nuevo estado --</option>
+                                <option value="pendiente" {% if pedido.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                                <option value="confirmado" {% if pedido.estado == 'confirmado' %}selected{% endif %}>Confirmado</option>
+                                <option value="preparando" {% if pedido.estado == 'preparando' %}selected{% endif %}>Preparando</option>
+                                <option value="listo" {% if pedido.estado == 'listo' %}selected{% endif %}>Listo</option>
+                                <option value="cancelado" {% if pedido.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                            </select>
+                            <button type="submit" class="btn-gold">ACTUALIZAR</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="detail-sidebar">
+            <div class="custom-card custom-card-gradient">
+                <h5 class="card-title-gold">📊 RESUMEN</h5>
+                
+                <div class="summary-group">
+                    <span class="info-label">ID DEL PEDIDO</span>
+                    <span class="summary-value">#{{ pedido.id_pedido }}</span>
+                </div>
+                
+                <div class="summary-group" style="border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
+                    <span class="info-label">CANTIDAD DE ITEMS</span>
+                    <span class="summary-value-small">{{ items.count }}</span>
+                </div>
+                
+                <div class="total-banner" style="margin-bottom: 20px;">
+                    <span class="info-label">TOTAL A PAGAR</span>
+                    <span class="total-value">${{ total }}</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="{% url 'mis_pedidos' %}" class="btn-dark-outline" style="text-align: center; display: block;">← MIS PEDIDOS</a>
+                <a href="{% url 'menu' %}" class="btn-gold" style="text-align: center; display: block;">🏠 VER MENÚ</a>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+    /* Variables y Base */
+    :root {
+        --gold: #d4af37;
+        --gold-hover: #e8c744;
+        --dark-bg: #1a1a1a;
+        --card-bg: #1f1f1f;
+        --border-color: #333333;
+        --text-muted: #999999;
+    }
+    
+    .custom-container {
+        max-width: 1200px;
+        margin: 30px auto 50px;
+        padding: 0 15px;
+    }
+
+    /* Layout Principal CSS Flexbox */
+    .detail-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+    }
+    .detail-main {
+        flex: 1 1 60%;
+        min-width: 300px;
+    }
+    .detail-sidebar {
+        flex: 1 1 30%;
+        min-width: 280px;
+        position: sticky;
+        top: 20px;
+    }
+
+    /* Encabezado */
+    .page-header {
+        border-top: 2px solid var(--gold);
+        padding-top: 15px;
+        margin-bottom: 25px;
+    }
+    .page-header h1 {
+        font-size: 1.8rem;
+        color: var(--gold);
+        font-weight: bold;
+        margin: 0;
+    }
+    .page-header p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+
+    /* Tarjetas */
+    .custom-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .custom-card-gradient {
+        background: linear-gradient(135deg, #1a1a1a, #252525);
+    }
+    .card-title-gold {
+        color: var(--gold);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* Grid Interno para Información General */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    @media (max-width: 768px) {
+        .info-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Tipografía e Información */
+    .info-group { margin-bottom: 15px; }
+    .summary-group { margin-bottom: 15px; }
+    .info-label {
+        display: block;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        margin-bottom: 3px;
+        letter-spacing: 0.5px;
+    }
+    .info-value {
+        display: block;
+        color: #cccccc;
+        font-size: 0.95rem;
+    }
+    .text-gold { color: var(--gold); }
+    .mb-0 { margin-bottom: 0 !important; }
+    
+    .summary-value {
+        color: var(--gold);
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .summary-value-small {
+        color: var(--gold);
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    /* Banners Totales */
+    .total-banner {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), transparent);
+        padding: 15px 20px;
+        border-left: 3px solid var(--gold);
+        border-radius: 4px;
+    }
+    .total-value {
+        color: var(--gold);
+        font-size: 1.8rem;
+        font-weight: bold;
+        line-height: 1;
+        display: block;
+        margin-top: 5px;
+    }
+
+    /* Tabla (A prueba de Bootstrap) */
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #cccccc;
+    }
+    .custom-table thead { background-color: #111111; }
+    .custom-table th {
+        color: var(--text-muted);
+        font-weight: normal;
+        padding: 12px 15px;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+    .custom-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: middle;
+    }
+
+    /* Controles de Admin */
+    .admin-controls {
+        display: flex;
+        gap: 10px;
+    }
+    .custom-select {
+        flex-grow: 1;
+        background-color: #111;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        padding: 10px;
+        border-radius: 4px;
+        outline: none;
+    }
+    @media (max-width: 480px) {
+        .admin-controls { flex-direction: column; }
+    }
+
+    /* Botones */
+    .btn-gold {
+        background: var(--gold);
+        color: #000;
+        font-weight: bold;
+        border: none;
+        padding: 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+    .btn-gold:hover {
+        background: var(--gold-hover);
+        color: #000;
+        text-decoration: none;
+    }
+    .btn-dark-outline {
+        background: transparent;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .btn-dark-outline:hover {
+        background: var(--gold);
+        color: #000;
+        text-decoration: none;
+    }
+
+    /* Badges */
+    .custom-badge {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    .badge-pendiente { background: #ffc107; color: #000; }
+    .badge-confirmado { background: #17a2b8; color: #fff; }
+    .badge-preparando { background: #007bff; color: #fff; }
+    .badge-listo { background: #28a745; color: #fff; }
+    .badge-cancelado { background: #dc3545; color: #fff; }
+</style>
+{% endblock %}

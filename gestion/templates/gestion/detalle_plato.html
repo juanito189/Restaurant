@@ -47,15 +47,30 @@
         </div>
 
         <!-- Botones de Acción -->
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button style="background: var(--primary); color: var(--text-light); border: none; font-family: 'Jost', sans-serif; 
-                         font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; 
-                         padding: 14px 28px; cursor: pointer; transition: all 0.25s ease;"
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+          {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'agregar_item_pedido' plato.id_plato %}" style="display: flex; gap: 10px; align-items: center;">
+              {% csrf_token %}
+              <input type="number" name="cantidad" value="1" min="1" max="99" style="width: 60px; padding: 8px; border: 1px solid var(--border-subtle); 
+                                                                                         font-size: 0.95rem; text-align: center;">
+              <button type="submit" style="background: var(--primary); color: var(--text-light); border: none; font-family: 'Jost', sans-serif; 
+                             font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; 
+                             padding: 14px 28px; cursor: pointer; transition: all 0.25s ease;"
+                      onmouseover="this.style.background='var(--gold)'; this.style.color='var(--primary)';"
+                      onmouseout="this.style.background='var(--primary)'; this.style.color='var(--text-light)';">
+                🛒 Agregar al Carrito
+              </button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" style="background: var(--primary); color: var(--text-light); border: none; font-family: 'Jost', sans-serif; 
+                             font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; 
+                             padding: 14px 28px; cursor: pointer; transition: all 0.25s ease; text-decoration: none; display: inline-block;"
                   onmouseover="this.style.background='var(--gold)'; this.style.color='var(--primary)';"
                   onmouseout="this.style.background='var(--primary)'; this.style.color='var(--text-light)';">
-            🛒 Pedir Ahora
-          </button>
-          {% if user.is_authenticated and user.perfil.rol == 'admin' %}
+              🔐 Inicia Sesión para Pedir
+            </a>
+          {% endif %}
+          {% if user.is_authenticated and user.is_staff %}
           <a href="{% url 'editar_plato' plato.id_plato %}" style="background: transparent; color: var(--gold); border: 1px solid var(--gold); 
                                               font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 500; 
                                               letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 28px; 

@@ -610,12 +610,22 @@
         <a href="#hero">Inicio</a>
         <a href="#menu-section">Menú</a>
         {% if user.is_authenticated %}
-          {% if user.perfil.rol == 'admin' %}
+          <a href="{% url 'carrito_pedido' %}" style="display: flex; align-items: center; gap: 8px; color: var(--gold);">
+            🛒 Carrito
+          </a>
+          <a href="{% url 'mis_pedidos' %}" style="display: flex; align-items: center; gap: 8px; color: var(--gold);">
+            📋 Mis Pedidos
+          </a>
+          {% if user.is_staff %}
             <a href="{% url 'crear_plato' %}">+ Crear</a>
+            <a href="{% url 'listar_todos_pedidos' %}">👨‍💼 Pedidos</a>
+          {% elif user.perfil and user.perfil.rol == 'admin' %}
+            <a href="{% url 'crear_plato' %}">+ Crear</a>
+            <a href="{% url 'listar_todos_pedidos' %}">👨‍💼 Pedidos</a>
           {% endif %}
           <a href="#" style="display: flex; align-items: center; gap: 8px;">
             👤 {{ user.first_name|default:user.username }}
-            <small style="font-size: 0.7rem;">({{ user.perfil.get_rol_display }})</small>
+            <small style="font-size: 0.7rem;">({% if user.perfil %}{{ user.perfil.get_rol_display }}{% else %}Cliente{% endif %})</small>
           </a>
           <a href="{% url 'logout' %}" style="color: var(--danger);">🔓 Logout</a>
         {% else %}
@@ -691,9 +701,7 @@
       <button class="filter-btn" onclick="filtrar(this, 'principales')">Platos Principales</button>
       <button class="filter-btn" onclick="filtrar(this, 'bebidas')">Bebidas</button>
       <button class="filter-btn" onclick="filtrar(this, 'postres')">Postres</button>
-      {% if user.is_authenticated and user.perfil.rol == 'admin' %}
-        <a href="{% url 'crear_plato' %}" class="btn-create-plato">➕ Agregar Plato</a>
-      {% endif %}
+      {% if user.is_authenticated and user.is_staff %}\n        <a href="{% url 'crear_plato' %}" class="btn-create-plato">➕ Agregar Plato</a>\n      {% elif user.is_authenticated and user.perfil and user.perfil.rol == 'admin' %}\n        <a href="{% url 'crear_plato' %}" class="btn-create-plato">➕ Agregar Plato</a>\n      {% endif %}
     </div>
 
     <div class="menu-grid" id="menuGrid">
@@ -712,7 +720,15 @@
               </svg>
               Ver
             </a>
-            <button class="btn-add">🛒 Pedir</button>
+            {% if user.is_authenticated %}
+              <form method="POST" action="{% url 'agregar_item_pedido' plato.id_plato %}" style="flex: 1;">
+                {% csrf_token %}
+                <input type="hidden" name="cantidad" value="1">
+                <button type="submit" class="btn-add" style="width: 100%; border: none;">🛒 Pedir</button>
+              </form>
+            {% else %}
+              <a href="{% url 'login' %}" class="btn-add" style="flex: 1; text-align: center; text-decoration: none;">🔐 Login</a>
+            {% endif %}
           </div>
         </div>
       </div>
